@@ -1,5 +1,6 @@
 require "search_hb_plugin/version"
 require "search_hb_plugin/assign"
+require "search_hb_plugin/custom_type"
 
 module SearchHbPlugin
   class SearchHbPlugin
@@ -11,7 +12,8 @@ module SearchHbPlugin
 
     def self.liquid_tags
       {
-        :assign => Assign
+        :assign => Assign,
+        :custom_type => CustomType
       }
     end
   end

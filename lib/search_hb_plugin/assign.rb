@@ -10,7 +10,7 @@ module SearchHbPlugin
           @options = {}
           markup.scan(::Liquid::TagAttributes) { |key, value| @options[key.to_sym] = value.gsub(/"|'/, '') }
         else
-          raise ::Liquid::SyntaxError.new("Syntax Error in 'display_search_results_for' - Valid syntax:")
+          raise ::Liquid::SyntaxError.new("Syntax Error in 'search_assign' - Valid syntax: search_assign results to variable")
         end
 
         super
