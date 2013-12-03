@@ -1,3 +1,5 @@
+#require 'ruby-prof'
+
 module SearchHbPlugin
   class CustomType < ::Liquid::Tag
 
@@ -34,6 +36,7 @@ module SearchHbPlugin
         end
       end
 
+      #profile = RubyProf.profile do
       search = nil
       search_terms = context.registers[:controller].params[:search]
       if search_terms and !search_terms.empty?
@@ -45,7 +48,7 @@ module SearchHbPlugin
           }
         )
       else
-        search = content_type.entries.all.map { |e| e.to_liquid }
+        search = content_type.entries.all#.map { |e| e.to_liquid }
       end
 
       @fields.select! do |field|
@@ -55,7 +58,11 @@ module SearchHbPlugin
 
       final_results = []
       search.each do |result|
-        model_item = content_type.entries.where(_slug: result['_slug']).first.to_liquid
+        if result.class == Hash
+          model_item = content_type.entries.where(_slug: result['_slug']).first.to_liquid
+        else
+          model_item = result
+        end
         if match_fields(context, model_item)
           final_results << model_item.to_liquid
         else
@@ -63,6 +70,11 @@ module SearchHbPlugin
       end
 
       context[@target.to_s] = final_results
+      #end
+      # Print a graph profile to text
+      #printer = RubyProf::MultiPrinter.new(profile)
+      #printer.print(:path => '/home/greeneca/colibri/tmp/profile')
+
       ""
     end
 
