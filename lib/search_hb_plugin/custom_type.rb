@@ -56,16 +56,17 @@ module SearchHbPlugin
         param && !param.empty?
       end
 
-      final_results = []
+      slugs = []
       search.each do |result|
-        if result.class == Hash
-          model_item = content_type.entries.where(_slug: result['_slug']).first.to_liquid
-        else
-          model_item = result
-        end
-        if match_fields(context, model_item)
-          final_results << model_item.to_liquid
-        else
+        slugs << result['_slug']
+      end
+
+      final_results = []
+      content_type.ordered_entries(context["with_scope"]).each do |result|
+        if slugs.include?(result._slug)
+          if match_fields(context, result)
+            final_results << result.to_liquid
+          end
         end
       end
 
