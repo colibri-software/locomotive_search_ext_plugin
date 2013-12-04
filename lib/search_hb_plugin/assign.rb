@@ -18,7 +18,7 @@ module SearchHbPlugin
 
     def render(context)
       @site = context.registers[:site]
-      @result = context[@results]
+      @result = context[@results][0]
       result_data = nil
 
       if @result['content_type_slug']
