@@ -1,6 +1,7 @@
 require "search_hb_plugin/version"
 require "search_hb_plugin/assign"
 require "search_hb_plugin/custom_type"
+require "activesearch/proxy_score"
 
 module SearchHbPlugin
   class SearchHbPlugin

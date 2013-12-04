@@ -47,8 +47,6 @@ module SearchHbPlugin
           "content_type_slug" => @content_type_slug,
           }
         )
-      else
-        search = content_type.entries.all#.map { |e| e.to_liquid }
       end
 
       @fields.select! do |field|
@@ -56,21 +54,26 @@ module SearchHbPlugin
         param && !param.empty?
       end
 
-      slugs = []
-      search.each do |result|
-        slugs << result['_slug']
+      if search
+        slugs = {}
+        search.each do |result,score|
+          slugs[result['_slug']] = score
+        end
       end
 
       final_results = []
-      content_type.ordered_entries(context["with_scope"]).each do |result|
-        if slugs.include?(result._slug)
-          if match_fields(context, result)
-            final_results << result.to_liquid
+      content_type.ordered_entries(context["with_scope"]).each do |entry|
+        if !search or slugs.has_key?(entry._slug)
+          if match_fields(context, entry)
+            idx = 0
+            idx = slugs[entry._slug] if search
+            final_results[idx] ||= []
+            final_results[idx] << entry.to_liquid
           end
         end
       end
 
-      context[@target.to_s] = final_results
+      context[@target.to_s] = final_results.reverse.flatten.compact
       #end
       # Print a graph profile to text
       #printer = RubyProf::MultiPrinter.new(profile)
