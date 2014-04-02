@@ -1,16 +1,17 @@
 module SearchHbPlugin
   class Assign < ::Liquid::Tag
 
-    Syntax = /(#{::Liquid::VariableSignature}+)\s*to\s*(#{::Liquid::VariableSignature}+)/
+    Syntax = /(#{::Liquid::VariableSignature}+)\s*to\s*(#{::Liquid::VariableSignature}+):\s*(#{::Liquid::VariableSignature}+)/
 
       def initialize(tag_name, markup, tokens, context)
         if markup =~ Syntax
           @results = $1
           @target = $2
+          @tag = $3
           @options = {}
           markup.scan(::Liquid::TagAttributes) { |key, value| @options[key.to_sym] = value.gsub(/"|'/, '') }
         else
-          raise ::Liquid::SyntaxError.new("Syntax Error in 'search_assign' - Valid syntax: search_assign results to variable")
+          raise ::Liquid::SyntaxError.new("Syntax Error in 'search_assign' - Valid syntax: search_assign results to variable: pagetag")
         end
 
         super
@@ -24,13 +25,14 @@ module SearchHbPlugin
       if @result['content_type_slug']
         # its a model entry
         model = @site.content_types.where(slug: @result['content_type_slug']).first
-        model_item = model.entries.where(_slug: @result['_slug']).first.to_liquid
+        model_item = model.entries.find(@result['orginal_id']).to_liquid
         result_data = model_item
-
+        context[@flag.to_s] = false
       else
         # it is a page
-        page = @site.pages.where(:slug => @result['slug']).to_a.first.to_liquid
+        page = @site.pages.find(@result['orginal_id']).to_liquid
         result_data = page
+        context[@flag.to_s] = true
       end
       context[@target.to_s] = result_data
       ""

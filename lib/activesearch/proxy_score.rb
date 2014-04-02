@@ -21,8 +21,13 @@ module ActiveSearch
 
     def generate_score(result)
       score = 0
-      result._keywords.each do |key|
-        score += 1 if text_words.include?(key)
+      result.each do |k,v|
+        score += 1 if text_words.include?(k)
+        if v.class == String
+          v.split.each do |word|
+            score += 1 if text_words.include?(word)
+          end
+        end
       end
       score
     end
