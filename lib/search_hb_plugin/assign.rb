@@ -25,12 +25,12 @@ module SearchHbPlugin
       if @result['content_type_slug']
         # its a model entry
         model = @site.content_types.where(slug: @result['content_type_slug']).first
-        model_item = model.entries.find(@result['orginal_id']).to_liquid
+        model_item = model.entries.find(@result['original_id']).to_liquid
         result_data = model_item
         context[@flag.to_s] = false
       else
         # it is a page
-        page = @site.pages.find(@result['orginal_id']).to_liquid
+        page = @site.pages.find(@result['original_id']).to_liquid
         result_data = page
         context[@flag.to_s] = true
       end
