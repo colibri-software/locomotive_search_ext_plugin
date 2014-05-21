@@ -7,7 +7,7 @@ module SearchHbPlugin
         if markup =~ Syntax
           @results = $1
           @target = $2
-          @tag = $3
+          @flag = $3
           @options = {}
           markup.scan(::Liquid::TagAttributes) { |key, value| @options[key.to_sym] = value.gsub(/"|'/, '') }
         else
@@ -20,18 +20,18 @@ module SearchHbPlugin
     def render(context)
       @site = context.registers[:site]
       @result = context[@results][0]
-      result_data = nil
+      result_data = false
 
       if @result['content_type_slug']
         # its a model entry
         model = @site.content_types.where(slug: @result['content_type_slug']).first
         model_item = model.entries.find(@result['original_id']).to_liquid
-        result_data = model_item
+        result_data = model_item if model_item
         context[@flag.to_s] = false
       else
         # it is a page
         page = @site.pages.find(@result['original_id']).to_liquid
-        result_data = page
+        result_data = page if page
         context[@flag.to_s] = true
       end
       context[@target.to_s] = result_data

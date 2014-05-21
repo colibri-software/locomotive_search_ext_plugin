@@ -40,6 +40,7 @@ module SearchHbPlugin
       search = nil
       search_terms = context.registers[:controller].params[:search]
       if search_terms and !search_terms.empty?
+        Rails.logger.warn "Params: #{search_terms}, { \"site_id\" => #{@site.id}, \"content_type_slug\" => #{@content_type_slug} }"
         search = ::ActiveSearch.search(
           search_terms,
           {
@@ -57,10 +58,12 @@ module SearchHbPlugin
       if search
         slugs = {}
         search.each do |result,score|
+          Rails.logger.warn "search: #{result}"
           slugs[result['_slug']] = score
         end
       end
 
+      Rails.logger.warn "Seach Slugs: #{slugs}"
       final_results = []
       content_type.ordered_entries(context["with_scope"]).each do |entry|
         if !search or slugs.has_key?(entry._slug)
