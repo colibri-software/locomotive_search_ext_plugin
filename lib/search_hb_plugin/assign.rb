@@ -27,14 +27,15 @@ module SearchHbPlugin
         model = @site.content_types.where(slug: @result['content_type_slug']).first
         model_item = model.entries.find(@result['original_id']).to_liquid
         result_data = model_item if model_item
-        context[@flag.to_s] = false
+        context[@flag.to_s] = model.name
       else
         # it is a page
         page = @site.pages.find(@result['original_id']).to_liquid
         result_data = page if page
-        context[@flag.to_s] = true
+        context[@flag.to_s] = false
       end
       context[@target.to_s] = result_data
+      Rails.logger.error(result_data)
       ""
     end
   end
