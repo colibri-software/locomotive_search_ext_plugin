@@ -1,0 +1,72 @@
+h1. Search Plugin
+
+This is a plugin for LocomotiveCMS. It was created to allow LocomotiveCMS designers to add some functionallity to the LocomotiveCMS search gem.
+
+It provides a few liwuid tags that can be used to improve the search functionality.
+
+h2. Installation
+
+To use this plugin you must be using a version of LocomotiveCMS that has the plugins feature designed by "Colibri Software":https://www.colibri-software.com. You can do this by making the following changes to the Gemfile in you app:
+
+* Remove or comment out the following line:
+@gem 'locomotive_cms', '~> 2.X.X', require: 'locomotive/engine'@
+* Add the following line:
+@gem 'locomotive_cms', require: 'locomotive/engine', git: 'https://github.com/colibri-software/locomotive_engine.git', branch: 'plugins'@
+
+Then add the following lines in your Gemfile to include the plugin:
+<pre><code>group :locomotive_plugins do
+  gem 'search_hb_plugin', git: https://github.com/colibri-software/search_hb_plugin.git'
+end</code></pre>
+
+This plugin also requires the LocomotiveCMS Search gem. To add it add the following to your gemfile:
+@gem 'locomotivecms-search', require: 'locomotive/search/mongoid'@
+
+h2. Usage
+
+h3. Configuring Plugin
+
+This plugin requires no configuration.
+
+h3. Liquid Drops
+
+This plugin has no Liquid Drops
+
+h3. Liquid Tags
+
+This plugin provides several tags that will improve the search functionallity.
+
+The following is a list of tags and their options(and defaults):
+
+* search_assign
+** Used to turn a search result into a page or content_entry
+** Usage:
+@{% search_assign <search_result> to <variabel to assign to>: <variable for content_type name> %}@
+** Example:
+<pre><code>{% for result in site.search %}
+  {% search_assign result to object: flag %}
+  {% if object %}
+    {% link_to object%}
+    {% if flag %}
+      <p>{{flag}}</p>
+    {% else %}
+      <p>Page</p>
+    {% endif %}
+  {% endif %}
+{% endfor %}</code></pre>
+* search_custom_type
+** Used to do a search on a specific model using specific fields
+** Usage:
+@{% search_custom_type <content_type> on <comma seperated fields> to <variable to store results>%}@
+** Example:
+<pre><code><form id="members" action="/members">
+  <input type="text" name="category_id" />
+</form>
+{% search_custom_type members on fields category_id to results  %}
+{% for member in members %}
+  {{member.name}}
+{% endfor %}</code></pre>
+
+
+h3. Liquid Filters
+
+This plugin has no Liquid Filters
