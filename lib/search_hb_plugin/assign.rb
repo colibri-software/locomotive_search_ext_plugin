@@ -36,7 +36,7 @@ module SearchHbPlugin
         result_data = page if page
         context[@flag.to_s] = false
 
-	res =  @result['highlighted']['searchable_content']
+	res =  @resul['searchable_content']
 
 	puts HTML::FullSanitizer.new.sanitize(res)
 	context[@description] = res
