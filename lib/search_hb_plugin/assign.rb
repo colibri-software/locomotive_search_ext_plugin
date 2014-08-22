@@ -36,10 +36,9 @@ module SearchHbPlugin
         result_data = page if page
         context[@flag.to_s] = false
 
-	res =  @resul['searchable_content']
+	res =  @result['highlighted']['searchable_content']
 
-	puts HTML::FullSanitizer.new.sanitize(res)
-	context[@description] = res
+	context[@description] = strip_tags(res)
       end
       context[@target.to_s] = result_data
       Rails.logger.error(result_data)
