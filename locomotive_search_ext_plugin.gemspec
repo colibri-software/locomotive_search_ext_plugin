@@ -1,15 +1,15 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'search_hb_plugin/version'
+require 'locomotive/search_ext/plugin/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "search_hb_plugin"
-  spec.version       = SearchHbPlugin::VERSION
+  spec.name          = "locomotive_search_ext_plugin"
+  spec.version       = Locomotive::SearchExt::VERSION
   spec.authors       = ["Charlie Greene"]
   spec.email         = ["greeneca@gmail.com"]
   spec.description   = %q{Provides search display tag.}
-  spec.summary       = %q{Provides a simple search display tage.}
+  spec.summary       = %q{Provides a simple search display tag.}
   spec.homepage      = "http://colibri-software.com"
   spec.license       = "MIT"
 

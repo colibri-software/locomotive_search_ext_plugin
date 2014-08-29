@@ -15,7 +15,7 @@ To use this plugin you must be using a version of LocomotiveCMS that has the plu
 
 Then add the following lines in your Gemfile to include the plugin:
 <pre><code>group :locomotive_plugins do
-  gem 'search_hb_plugin', git: https://github.com/colibri-software/search_hb_plugin.git'
+  gem 'locomotive_search_ext_plugin'
 end</code></pre>
 
 This plugin also requires the LocomotiveCMS Search gem. To add it add the following to your gemfile:
@@ -46,6 +46,7 @@ The following is a list of tags and their options(and defaults):
   {% search_assign result to object: flag %}
   {% if object %}
     {% link_to object%}
+    {{ object_description }}
     {% if flag %}
       <p>{{flag}}</p>
     {% else %}
